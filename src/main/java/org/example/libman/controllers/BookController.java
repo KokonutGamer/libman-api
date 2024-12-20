@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Data returned by each method is written straight into the response body instead of rendering a template
 @RestController
 public class BookController {
     private final BookRepository repository;
 
+    // BookRepository injected by constructor into the controller
     BookController(BookRepository repository) {
         this.repository = repository;
     }
