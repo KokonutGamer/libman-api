@@ -1,11 +1,10 @@
 package org.example.libman.entities;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
-import java.util.Objects;
 
 // Note that Spring Data also contains wrappers for MongoDB and Cassandra
 
