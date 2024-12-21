@@ -22,7 +22,7 @@ public class LoadDatabase {
         // Requests a copy of the repository
         return args -> {
             // Creates two Book entities to store into the repository
-            log.info("Preloading " + repository.save(new Book(
+            log.info("Preloading {}", repository.save(new Book(
                     "The Apothecary Diaries: Volume 1",
                     "Natsu Hyuuga",
                     1,
@@ -30,7 +30,7 @@ public class LoadDatabase {
                     178,
                     LocalDate.of(2020, 12, 8),
                     BookStatus.AVAILABLE)));
-            log.info("Preloading " + repository.save(new Book(
+            log.info("Preloading {}", repository.save(new Book(
                     "Frieren: Beyond Journey's End",
                     "Kanehito Yamada",
                     1,
