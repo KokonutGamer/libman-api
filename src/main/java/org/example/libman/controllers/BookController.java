@@ -3,9 +3,14 @@ package org.example.libman.controllers;
 import org.example.libman.entities.Book;
 import org.example.libman.exceptions.BookNotFoundException;
 import org.example.libman.repositories.BookRepository;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 // Data returned by each method is written straight into the response body instead of rendering a template
 @RestController
@@ -17,23 +22,31 @@ public class BookController {
         this.repository = repository;
     }
 
-    // Aggregate root
-    // tag::get-aggregate-root[]
+    // Aggregate root now as a resource
+    // CollectionModel encapsulates collections of resources (in this case, book RESOURCES) instead of a single resource entity
+    // Includes links
     @GetMapping("/books")
-    List<Book> all() {
-        return repository.findAll();
+    CollectionModel<EntityModel<Book>> all() {
+        List<EntityModel<Book>> books = repository.findAll().stream().map(book -> EntityModel.of(book,
+                linkTo(methodOn(BookController.class).one(book.getId())).withSelfRel(), // flagged as self link
+                linkTo(methodOn(BookController.class).all()).withRel("books"))).collect(Collectors.toList()); // aggregate root called "books")
+
+        return CollectionModel.of(books, linkTo(methodOn(BookController.class).all()).withSelfRel());
     }
-    // end::get-aggregate-root[]
 
     @PostMapping("/books")
     Book newBook(@RequestBody Book newBook) {
         return repository.save(newBook);
     }
 
-    // Single item
+    // Changed to EntityModel<Book>
+    // Wraps data and collection of links
     @GetMapping("/books/{id}")
-    Book one(@PathVariable Long id) {
-        return repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    EntityModel<Book> one(@PathVariable Long id) {
+        Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+        return EntityModel.of(book,
+                linkTo(methodOn(BookController.class).one(id)).withSelfRel(), // flagged as self link
+                linkTo(methodOn(BookController.class).all()).withRel("books")); // aggregate root called "books"
     }
 
     @PutMapping("/books/{id}")
