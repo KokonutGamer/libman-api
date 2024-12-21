@@ -109,11 +109,10 @@ public class Book {
             return true;
         }
 
-        if (!(object instanceof Book)) {
+        if (!(object instanceof Book book)) {
             return false;
         }
 
-        Book book = (Book) object;
         return Objects.equals(this.id, book.id) && Objects.equals(this.title, book.title) && Objects.equals(this.author, book.author);
     }
 

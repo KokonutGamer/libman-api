@@ -5,6 +5,8 @@ import org.example.libman.exceptions.BookNotFoundException;
 import org.example.libman.repositories.BookRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -30,13 +32,13 @@ public class BookController {
     @GetMapping("/books")
     CollectionModel<EntityModel<Book>> all() {
         List<EntityModel<Book>> books = repository.findAll().stream().map(assembler::toModel).collect(Collectors.toList());
-
         return CollectionModel.of(books, linkTo(methodOn(BookController.class).all()).withSelfRel());
     }
 
     @PostMapping("/books")
-    Book newBook(@RequestBody Book newBook) {
-        return repository.save(newBook);
+    ResponseEntity<?> newBook(@RequestBody Book newBook) {
+        EntityModel<Book> entityModel = assembler.toModel(newBook);
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
     // Changed to EntityModel<Book>
