@@ -50,16 +50,23 @@ public class BookController {
     }
 
     @PutMapping("/books/{id}")
-    Book replaceBook(@RequestBody Book newBook, @PathVariable Long id) {
-        // Find the repository by id
-        return repository.findById(id).map(book -> {
+    ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable Long id) {
+        Book updatedBook = repository.findById(id).map(book -> {
             book.setTitle(newBook.getTitle());
             book.setAuthor(newBook.getAuthor());
+            book.setVolume(newBook.getVolume());
+            book.setEdition(newBook.getEdition());
+            book.setPageCount(newBook.getPageCount());
+            book.setPublicationDate(newBook.getPublicationDate());
+            book.setStatus(newBook.getStatus());
             return repository.save(book);
         }).orElseGet(() -> {
             // If no id found, save the newBook into the repository
             return repository.save(newBook);
         });
+
+        EntityModel<Book> entityModel = assembler.toModel(updatedBook);
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
     @DeleteMapping("/books/{id}")
