@@ -26,7 +26,7 @@ __**DELETE**__
 > This version of the API (0.0.1-SNAPSHOT) is not considered to be a RESTful service yet.
 
 ## Todo list
-- [ ] Add a new field(s) to the `Book` entity, such as pages, date published, volume, and edition
+- [X] Add a new field(s) to the `Book` entity, such as pages, date published, volume, and edition
 - [ ] Update POST methods to return a proper response
 - [ ] Update PUT methods to return a proper response
 - [ ] Update DELETE methods to return a proper response

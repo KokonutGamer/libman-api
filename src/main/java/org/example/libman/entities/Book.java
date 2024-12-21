@@ -1,5 +1,6 @@
 package org.example.libman.entities;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -19,13 +20,37 @@ public class Book {
     @GeneratedValue Long id;
     private String title;
     private String author;
+    private Integer volume;
+    private Integer edition;
+    private Integer pageCount;
+    private LocalDate publicationDate;
 
     public Book() {
     }
 
-    public Book(String title, String author) {
+    public Book(String title, String author, Integer volume, Integer edition, Integer pageCount, LocalDate publicationDate) {
         this.title = title;
         this.author = author;
+        this.volume = volume;
+        this.edition = edition;
+        this.pageCount = pageCount;
+        this.publicationDate = publicationDate;
+    }
+
+    public Integer getVolume() {
+        return volume;
+    }
+
+    public Integer getEdition() {
+        return edition;
+    }
+
+    public Integer getPageCount() {
+        return pageCount;
+    }
+
+    public LocalDate getPublicationDate() {
+        return publicationDate;
     }
 
     public Long getId() {
@@ -40,6 +65,10 @@ public class Book {
         return this.author;
     }
 
+    public void setVolume(Integer volume) {
+        this.volume = volume;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -50,6 +79,18 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public void setEdition(Integer edition) {
+        this.edition = edition;
+    }
+
+    public void setPageCount(Integer pageCount) {
+        this.pageCount = pageCount;
+    }
+
+    public void setPublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
     }
 
     @Override
