@@ -16,10 +16,12 @@ import java.util.stream.Collectors;
 @RestController
 public class BookController {
     private final BookRepository repository;
+    private final BookModelAssembler assembler;
 
     // BookRepository injected by constructor into the controller
-    BookController(BookRepository repository) {
+    BookController(BookRepository repository, BookModelAssembler assembler) {
         this.repository = repository;
+        this.assembler = assembler;
     }
 
     // Aggregate root now as a resource
@@ -27,9 +29,7 @@ public class BookController {
     // Includes links
     @GetMapping("/books")
     CollectionModel<EntityModel<Book>> all() {
-        List<EntityModel<Book>> books = repository.findAll().stream().map(book -> EntityModel.of(book,
-                linkTo(methodOn(BookController.class).one(book.getId())).withSelfRel(), // flagged as self link
-                linkTo(methodOn(BookController.class).all()).withRel("books"))).collect(Collectors.toList()); // aggregate root called "books")
+        List<EntityModel<Book>> books = repository.findAll().stream().map(assembler::toModel).collect(Collectors.toList());
 
         return CollectionModel.of(books, linkTo(methodOn(BookController.class).all()).withSelfRel());
     }
@@ -44,9 +44,7 @@ public class BookController {
     @GetMapping("/books/{id}")
     EntityModel<Book> one(@PathVariable Long id) {
         Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-        return EntityModel.of(book,
-                linkTo(methodOn(BookController.class).one(id)).withSelfRel(), // flagged as self link
-                linkTo(methodOn(BookController.class).all()).withRel("books")); // aggregate root called "books"
+        return assembler.toModel(book);
     }
 
     @PutMapping("/books/{id}")
