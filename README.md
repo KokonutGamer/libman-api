@@ -24,3 +24,11 @@ __**DELETE**__
 
 > [!WARNING]
 > This version of the API (0.0.1-SNAPSHOT) is not considered to be a RESTful service yet.
+
+## Todo list
+- [ ] Add a new field(s) to the `Book` entity, such as pages, date published, volume, and edition
+- [ ] Update POST methods to return a proper response
+- [ ] Update PUT methods to return a proper response
+- [ ] Update DELETE methods to return a proper response
+- [ ] Build new controllers implementing Hypermedia as the Engine of Application State (HATEOAS)
+- [ ] Add support for new entities such as `User` and/or `Librarian`
