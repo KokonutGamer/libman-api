@@ -24,17 +24,31 @@ public class Book {
     private Integer edition;
     private Integer pageCount;
     private LocalDate publicationDate;
+    private BookStatus status;
 
     public Book() {
     }
 
-    public Book(String title, String author, Integer volume, Integer edition, Integer pageCount, LocalDate publicationDate) {
+    public Book(String title, String author, Integer volume, Integer edition, Integer pageCount, LocalDate publicationDate, BookStatus status) {
         this.title = title;
         this.author = author;
         this.volume = volume;
         this.edition = edition;
         this.pageCount = pageCount;
         this.publicationDate = publicationDate;
+        this.status = status;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public String getAuthor() {
+        return this.author;
     }
 
     public Integer getVolume() {
@@ -53,16 +67,8 @@ public class Book {
         return publicationDate;
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getAuthor() {
-        return this.author;
+    public BookStatus getStatus() {
+        return status;
     }
 
     public void setVolume(Integer volume) {
@@ -91,6 +97,10 @@ public class Book {
 
     public void setPublicationDate(LocalDate publicationDate) {
         this.publicationDate = publicationDate;
+    }
+
+    public void setStatus(BookStatus status) {
+        this.status = status;
     }
 
     @Override
