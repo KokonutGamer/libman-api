@@ -70,7 +70,8 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    void deleteBook(@PathVariable Long id) {
+    ResponseEntity<?> deleteBook(@PathVariable Long id) {
         repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
