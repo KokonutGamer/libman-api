@@ -27,6 +27,7 @@ __**DELETE**__
 
 ## Todo list
 - [X] Add a new field(s) to the `Book` entity, such as pages, date published, volume, and edition
+- [ ] Update the `Book` entity to handle different states, such as available, on hold, and unavailable 
 - [ ] Update POST methods to return a proper response
 - [ ] Update PUT methods to return a proper response
 - [ ] Update DELETE methods to return a proper response
