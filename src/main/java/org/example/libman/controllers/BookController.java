@@ -58,7 +58,8 @@ public class BookController {
             book.setEdition(newBook.getEdition());
             book.setPageCount(newBook.getPageCount());
             book.setPublicationDate(newBook.getPublicationDate());
-            book.setStatus(newBook.getStatus());
+            book.setNumberOfAvailableCopies(newBook.getNumberOfAvailableCopies());
+            book.setTotalNumberOfCopies(newBook.getTotalNumberOfCopies());
             return repository.save(book);
         }).orElseGet(() -> {
             // If no id found, save the newBook into the repository
