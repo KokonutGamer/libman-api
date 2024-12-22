@@ -28,5 +28,6 @@ public class Book {
     @NonNull private Integer edition;
     @NonNull private Integer pageCount;
     @NonNull private LocalDate publicationDate;
-    @NonNull private BookStatus status;
+    @NonNull private Integer numberOfAvailableCopies;
+    @NonNull private Integer totalNumberOfCopies;
 }

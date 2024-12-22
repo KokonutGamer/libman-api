@@ -30,8 +30,9 @@ Libman is a basic REST API built using Spring Web, Spring Data Java Persistence 
 - [X] Update POST methods to return a proper response
 - [X] Update PUT methods to return a proper response
 - [X] Update DELETE methods to return a proper response
-- [ ] Incorporate Lombok to reduce boilerplate on entities
-- [ ] Update the `Book` entity to handle different states, such as available, on hold, and unavailable 
+- [X] Incorporate Lombok to reduce boilerplate on entities
+- [ ] ~~Update the `Book` entity to handle different states, such as available, on hold, and unavailable~~
+- [ ] Change the `Book` entity `BookStatus` field to a numerical field with available copies
 - [ ] Change `BookController` structure to handle links with different states
 - [ ] Build new controllers implementing Hypermedia as the Engine of Application State (HATEOAS)
 - [ ] Add support for new entities such as `User` and/or `Librarian`
