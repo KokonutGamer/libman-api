@@ -73,7 +73,7 @@ public class BookController {
     }
 
     // TODO enforce authorization using Spring Security - USER and LIBRARIAN
-    @PutMapping("/books/{id}")
+    @PutMapping("/books/{id}/checkout")
     ResponseEntity<?> checkoutBook(@PathVariable Long id) {
         Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
 
@@ -92,7 +92,7 @@ public class BookController {
     }
 
     // TODO enforce authorization using Spring Security - LIBRARIAN only
-    @PutMapping("/books/{id}")
+    @PutMapping("/books/{id}/return")
     ResponseEntity<?> returnBook(@PathVariable Long id) {
         Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
 
