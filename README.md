@@ -34,6 +34,7 @@ Libman is a basic REST API built using Spring Web, Spring Data Java Persistence 
 - [ ] ~~Update the `Book` entity to handle different states, such as available, on hold, and unavailable~~
 - [X] Change the `Book` entity `BookStatus` field to a numerical field with available copies
 - [X] Change `BookController` structure to handle links with different states
+- [ ] Add JWT-based authentication in-memory
 - [ ] Implement Spring Security to handle requests from different roles, such as:
   - **ADMIN**: manages users (CRUD operations)
   - **LIBRARIAN**: manages books (CRUD operations), mark books as returned, update holds, flag users

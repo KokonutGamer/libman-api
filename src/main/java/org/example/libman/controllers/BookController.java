@@ -11,6 +11,7 @@ import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 // Data returned by each method is written straight into the response body instead of rendering a template
 @RestController
+@RequestMapping("${api.endpoint}")
 public class BookController {
     private final BookRepository repository;
     private final BookModelAssembler assembler;
@@ -37,6 +39,7 @@ public class BookController {
     }
 
     // TODO enforce authorization using Spring Security - LIBRARIAN and ADMIN
+    @Secured({"ROLE_ADMIN", "ROLE_LIBRARIAN"})
     @PostMapping("/books")
     ResponseEntity<?> newBook(@RequestBody Book newBook) {
         EntityModel<Book> entityModel = assembler.toModel(newBook);
@@ -51,6 +54,7 @@ public class BookController {
     }
 
     // TODO enforce authorization using Spring Security - LIBRARIAN and ADMIN
+    @Secured({"ROLE_ADMIN", "ROLE_LIBRARIAN"})
     @PutMapping("/books/{id}")
     ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable Long id) {
         Book updatedBook = repository.findById(id).map(book -> {
@@ -73,6 +77,7 @@ public class BookController {
     }
 
     // TODO enforce authorization using Spring Security - USER and LIBRARIAN
+    @Secured({"ROLE_LIBRARIAN", "ROLE_USER"})
     @PatchMapping("/books/{id}/checkout")
     ResponseEntity<?> checkoutBook(@PathVariable Long id) {
         Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
@@ -92,6 +97,7 @@ public class BookController {
     }
 
     // TODO enforce authorization using Spring Security - LIBRARIAN only
+    @Secured("ROLE_LIBRARIAN")
     @PatchMapping("/books/{id}/return")
     ResponseEntity<?> returnBook(@PathVariable Long id) {
         Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
