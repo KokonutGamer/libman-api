@@ -42,3 +42,11 @@ Libman is a basic REST API built using Spring Web, Spring Data Java Persistence 
 ### Backlog
 - [ ] Build new controllers implementing Hypermedia as the Engine of Application State (HATEOAS)
 - [ ] Add support for new entities such as `User` and/or `Librarian`
+
+### [REST constraints (to keep in mind)](https://restfulapi.net/rest-architectural-constraints/)
+- Uniform interface
+- Client-server
+- Stateless
+- Cacheable
+- Layered system
+- Code on demand
