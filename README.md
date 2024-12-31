@@ -54,3 +54,6 @@ Libman is a basic REST API built using Spring Web, Spring Data Java Persistence 
 - Cacheable
 - Layered system
 - Code on demand
+
+### Example Requests
+*To be added*

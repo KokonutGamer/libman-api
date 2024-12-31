@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,21 +23,26 @@ public class User implements UserDetails {
     private Integer id;
 
     @Column(nullable = false)
+    @NonNull
     private String username;
 
     @Column(unique = true, length = 100, nullable = false)
+    @NonNull
     private String email;
 
     @Column(nullable = false)
+    @NonNull
     private String password;
 
     @CreationTimestamp
     @Setter(AccessLevel.NONE)
     @Column(updatable = false, name = "created_at")
+    @NonNull
     private Date createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
+    @NonNull
     private Date updatedAt;
 
     @Override
