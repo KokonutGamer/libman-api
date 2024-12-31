@@ -56,4 +56,5 @@ Libman is a basic REST API built using Spring Web, Spring Data Java Persistence 
 - Code on demand
 
 ### Example Requests
-*To be added*
+- **Register a user**: `curl -H "Content-Type: application/json" -d '{"email": "mglaping@uw.edu", "password": "ILoveKokomi", "username": "Koi Fish"}' localhost:8080/api/v1/signup`
+- **Login using an existing user's account information**: `curl -H "Content-Type: application/json" -d '{"email": "mglaping@uw.edu", "password": "ILoveKokomi"}' localhost:8080/api/v1/login`

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("${api.endpoint}")
+@RequestMapping("${api.endpoint}/auth")
 public class AuthenticationController {
     private final JwtService jwtService;
     private final AuthenticationService authenticationService;
