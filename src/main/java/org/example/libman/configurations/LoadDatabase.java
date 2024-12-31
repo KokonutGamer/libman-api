@@ -1,4 +1,4 @@
-package org.example.libman;
+package org.example.libman.configurations;
 
 import org.example.libman.entities.Book;
 import org.example.libman.repositories.BookRepository;

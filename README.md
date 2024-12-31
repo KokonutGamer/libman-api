@@ -42,6 +42,10 @@ Libman is a basic REST API built using Spring Web, Spring Data Java Persistence 
   - **LIBRARIAN**: manages books (CRUD operations), mark books as returned, update holds, flag users
   - **USER**: borrow, hold, renew books
 
+> [!CAUTION]
+> The `User` entity uses annotations from both @Entity [(jakarta.persistence.Entity)](https://jakarta.ee/specifications/persistence/2.2/apidocs/javax/persistence/entity) and @Data [(lombok.Data)](https://projectlombok.org/features/Data).
+> This may result in conflicts between Lombok's creation of getters and setters along with Hibernate's `@UpdateTimestamp`.
+> Check [this StackOverflow post](https://stackoverflow.com/questions/67378688/how-do-i-create-a-safe-lombok-jpa-entity) again in case a breaking change occurs.
 
 ### [REST constraints (to keep in mind)](https://restfulapi.net/rest-architectural-constraints/)
 - Uniform interface
