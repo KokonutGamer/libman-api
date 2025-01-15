@@ -1,5 +1,6 @@
 package org.example.libman.configurations;
 
+import jakarta.servlet.Filter;
 import org.example.libman.entities.Book;
 import org.example.libman.entities.User;
 import org.example.libman.repositories.BookRepository;
@@ -9,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.web.SecurityFilterChain;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -20,6 +24,7 @@ public class LoadDatabase {
 
     // Spring Boot runs ALL CommandLineRunner beans once the application context is loaded
     @Bean
+    @Order(1)
     CommandLineRunner initDatabase(BookRepository bookRepository, UserRepository userRepository) {
         // Requests a copy of the repository
         String logText = "Preloading {}";
@@ -50,6 +55,19 @@ public class LoadDatabase {
                     new Date(System.currentTimeMillis()),
                     new Date(System.currentTimeMillis())
             )));
+        };
+    }
+
+    @Bean
+    @Order(2)
+    CommandLineRunner logSecurityRules(FilterChainProxy filterChainProxy) {
+        return args -> {
+            for (SecurityFilterChain chain : filterChainProxy.getFilterChains()) {
+                log.info("Chain: {}", chain);
+                for (Filter filter : chain.getFilters()) {
+                    log.info("Filter: {}", filter.getClass());
+                }
+            }
         };
     }
 }
