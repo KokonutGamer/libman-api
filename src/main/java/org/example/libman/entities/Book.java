@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 import org.example.libman.dtos.BookDTO;
 
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,29 +18,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Book {
 
-    /* id, title, and author are attributes of our Book domain object
-     * id is marked with more JPA annotations to indicate that it is
-     * the primary key and is automatically populated by the JPA provider */
     private @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    @Column(length = 13, columnDefinition = "CHAR(13)")
+    String isbn;
 
     private String title;
 
+    private @Nullable
+    String subtitle;
+
     private String author;
 
-    private Integer volume;
+    private @Column(length = 4)
+    @Nullable
+    String volume;
 
-    private Integer edition;
+    private @Column(length = 4)
+    @Nullable
+    String edition;
 
     private Integer pageCount;
 
     private LocalDate publicationDate;
 
-    private Integer numberOfAvailableCopies;
-
-    private Integer totalNumberOfCopies;
-
+    // TODO rewrite fromDTO method with new Book fields
     public static Book fromDTO(BookDTO dto) {
         Book book = new Book();
         book.setTitle(dto.getTitle());
@@ -49,8 +50,6 @@ public class Book {
         book.setEdition(dto.getEdition());
         book.setPageCount(dto.getPageCount());
         book.setPublicationDate(dto.getPublicationDate());
-        book.setNumberOfAvailableCopies(dto.getNumberOfAvailableCopies());
-        book.setTotalNumberOfCopies(dto.getTotalNumberOfCopies());
         return book;
     }
 }

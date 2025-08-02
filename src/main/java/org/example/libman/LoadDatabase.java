@@ -35,22 +35,16 @@ public class LoadDatabase {
         Book apothecary = new Book();
         apothecary.setTitle("The Apothecary Diaries: Volume 1");
         apothecary.setAuthor("Natsu Hyuuga");
-        apothecary.setVolume(1);
-        apothecary.setEdition(1);
+        apothecary.setVolume("1");
         apothecary.setPageCount(178);
         apothecary.setPublicationDate(LocalDate.of(2020, 12, 8));
-        apothecary.setNumberOfAvailableCopies(3);
-        apothecary.setTotalNumberOfCopies(5);
 
         Book frieren = new Book();
         frieren.setTitle("Frieren: Beyond Journey's End");
         frieren.setAuthor("Kanehito Yamada");
-        frieren.setVolume(1);
-        frieren.setEdition(1);
+        frieren.setVolume("1");
         frieren.setPageCount(192);
         frieren.setPublicationDate(LocalDate.of(2021, 11, 9));
-        frieren.setNumberOfAvailableCopies(0);
-        frieren.setTotalNumberOfCopies(7);
 
         return args -> {
             // Creates two Book entities to store into the repository

@@ -54,24 +54,22 @@ public class BookController {
     }
 
     // TODO don't change this method; use it to subscribe users that want to hold a book
-    @GetMapping("/books/{id}")
-    public EntityModel<Book> one(@PathVariable Long id) {
-        Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    @GetMapping("/books/{isbn}")
+    public EntityModel<Book> one(@PathVariable String isbn) {
+        Book book = repository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
         return assembler.toModel(book);
-    }
+    } 
 
     // TODO enforce authorization using Spring Security - LIBRARIAN and ADMIN
-    @PutMapping("/books/{id}")
-    public ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable Long id) {
-        Book updatedBook = repository.findById(id).map(book -> {
+    @PutMapping("/books/{isbn}")
+    public ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable String isbn) {
+        Book updatedBook = repository.findById(isbn).map(book -> {
             book.setTitle(newBook.getTitle());
             book.setAuthor(newBook.getAuthor());
             book.setVolume(newBook.getVolume());
             book.setEdition(newBook.getEdition());
             book.setPageCount(newBook.getPageCount());
             book.setPublicationDate(newBook.getPublicationDate());
-            book.setNumberOfAvailableCopies(newBook.getNumberOfAvailableCopies());
-            book.setTotalNumberOfCopies(newBook.getTotalNumberOfCopies());
             return repository.save(book);
         }).orElseGet(() -> {
             // If no id found, save the newBook into the repository
@@ -83,48 +81,37 @@ public class BookController {
     }
 
     // TODO enforce authorization using Spring Security - USER and LIBRARIAN
-    @PatchMapping("/books/{id}/checkout")
-    public ResponseEntity<?> checkoutBook(@PathVariable Long id) {
-        Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    @PatchMapping("/books/{isbn}/checkout")
+    public ResponseEntity<?> checkoutBook(@PathVariable String isbn) {
+        Book book = repository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
 
-        int numberAvailable = book.getNumberOfAvailableCopies();
-        if (numberAvailable > 0) {
-            book.setNumberOfAvailableCopies(numberAvailable - 1);
-            return ResponseEntity.ok(assembler.toModel(repository.save(book)));
-        }
+        // TODO refactor checkout logic, or delegate to a service
 
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE)
                 .body(Problem.create()
-                        .withTitle("Method not allowed")
-                        .withDetail("You can't checkout a book with " + book.getNumberOfAvailableCopies() + " copies available"));
+                        .withTitle("Method not allowed"));
     }
 
     // TODO enforce authorization using Spring Security - LIBRARIAN only
-    @PatchMapping("/books/{id}/return")
-    public ResponseEntity<?> returnBook(@PathVariable Long id) {
-        Book book = repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    @PatchMapping("/books/{isbn}/return")
+    public ResponseEntity<?> returnBook(@PathVariable String isbn) {
+        Book book = repository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
 
-        int numberAvailable = book.getNumberOfAvailableCopies();
-        int total = book.getTotalNumberOfCopies();
-        if (numberAvailable < total) {
-            book.setNumberOfAvailableCopies(numberAvailable + 1);
-            return ResponseEntity.ok(assembler.toModel(repository.save(book)));
-        }
+        // TODO refactor return logic, or delegate to a service
 
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE)
                 .body(Problem.create()
-                        .withTitle("Method not allowed")
-                        .withDetail("You can't return a book with " + book.getNumberOfAvailableCopies() + " out of " + book.getTotalNumberOfCopies() + " copies available"));
+                        .withTitle("Method not allowed"));
     }
 
     // TODO enforce authorization using Spring Security
-    @DeleteMapping("/books/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
-        repository.deleteById(id);
+    @DeleteMapping("/books/{isbn}")
+    public ResponseEntity<?> deleteBook(@PathVariable String isbn) {
+        repository.deleteById(isbn);
         return ResponseEntity.noContent().build();
     }
 }
