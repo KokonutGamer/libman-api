@@ -1,13 +1,17 @@
 package org.example.libman.entities;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import org.example.libman.dtos.BookDTO;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,34 +22,51 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Book {
 
-    private @Id
+    @Id
     @Column(length = 13, columnDefinition = "CHAR(13)")
-    String isbn;
+    private String isbn;
 
     private String title;
 
-    private @Nullable
-    String subtitle;
+    @Column(nullable = true)
+    private String subtitle;
 
-    private String author;
+    @Column(length = 4, nullable = true)
+    private String volume;
 
-    private @Column(length = 4)
-    @Nullable
-    String volume;
+    @Column(length = 4, nullable = true)
+    private String edition;
 
-    private @Column(length = 4)
-    @Nullable
-    String edition;
-
+    @Column(name = "page_count")
     private Integer pageCount;
 
+    @Column(name = "publication_date")
     private LocalDate publicationDate;
+
+    private String description;
+
+    @Column(length = 15)
+    private String ddn;
+
+    // Relationships
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id", nullable = false)
+    private Publisher publisher;
+
+    @ManyToMany(mappedBy = "writtenBooks")
+    private Set<Author> authors;
+
+    @ManyToMany(mappedBy = "books")
+    private Set<Genre> genres;
+
+    @OneToMany(mappedBy = "book")
+    private Set<BookCopy> libraryCopies;
 
     // TODO rewrite fromDTO method with new Book fields
     public static Book fromDTO(BookDTO dto) {
         Book book = new Book();
         book.setTitle(dto.getTitle());
-        book.setAuthor(dto.getAuthor());
         book.setVolume(dto.getVolume());
         book.setEdition(dto.getEdition());
         book.setPageCount(dto.getPageCount());

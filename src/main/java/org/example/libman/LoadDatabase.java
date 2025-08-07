@@ -25,7 +25,8 @@ public class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-    // Spring Boot runs ALL CommandLineRunner beans once the application context is loaded
+    // Spring Boot runs ALL CommandLineRunner beans once the application context is
+    // loaded
     @Bean
     public CommandLineRunner initDatabase(BookRepository repository) {
         // Requests a copy of the repository
@@ -33,15 +34,15 @@ public class LoadDatabase {
 
         // Create books
         Book apothecary = new Book();
+        apothecary.setIsbn("9781646090709");
         apothecary.setTitle("The Apothecary Diaries: Volume 1");
-        apothecary.setAuthor("Natsu Hyuuga");
         apothecary.setVolume("1");
         apothecary.setPageCount(178);
         apothecary.setPublicationDate(LocalDate.of(2020, 12, 8));
 
         Book frieren = new Book();
+        frieren.setIsbn("9781974725762");
         frieren.setTitle("Frieren: Beyond Journey's End");
-        frieren.setAuthor("Kanehito Yamada");
         frieren.setVolume("1");
         frieren.setPageCount(192);
         frieren.setPublicationDate(LocalDate.of(2021, 11, 9));
@@ -58,7 +59,8 @@ public class LoadDatabase {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         UserDetails user = User.withUsername("user").password(encoder.encode("UserPW123#$")).roles("USER").build();
         UserDetails admin = User.withUsername("admin").password(encoder.encode("AdminPW123#$")).roles("ADMIN").build();
-        UserDetails librarian = User.withUsername("librarian").password(encoder.encode("LibPW123#$")).roles("LIBRARIAN").build();
+        UserDetails librarian = User.withUsername("librarian").password(encoder.encode("LibPW123#$")).roles("LIBRARIAN")
+                .build();
         return new InMemoryUserDetailsManager(user, admin, librarian);
     }
 
@@ -67,8 +69,7 @@ public class LoadDatabase {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for API
                 .authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .httpBasic(httpBasic -> {
                 });
         return http.build();

@@ -65,7 +65,6 @@ public class BookController {
     public ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable String isbn) {
         Book updatedBook = repository.findById(isbn).map(book -> {
             book.setTitle(newBook.getTitle());
-            book.setAuthor(newBook.getAuthor());
             book.setVolume(newBook.getVolume());
             book.setEdition(newBook.getEdition());
             book.setPageCount(newBook.getPageCount());
