@@ -1,8 +1,13 @@
 package org.example.libman.entities;
 
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,9 +18,15 @@ import lombok.NoArgsConstructor;
 @Table(name = "library_location")
 public class LibraryLocation {
 
-    private @Id
-    Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-    private @Column(length = 30)
-    String name;
+    @Column(length = 30, unique = true)
+    private String name;
+
+    // Relationships
+
+    @OneToMany(mappedBy = "location")
+    private Set<BookCopy> locationCopies;
 }
