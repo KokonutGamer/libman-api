@@ -3,6 +3,8 @@ package org.example.libman.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,14 +15,17 @@ import lombok.NoArgsConstructor;
 @Table(name = "book_copy")
 public class BookCopy {
 
-    private @Id
+    @Id
     @Column(length = 10, columnDefinition = "CHAR(10)")
-    String barcode;
+    private String barcode;
 
-    // TODO change to FK reference
-    private @Column(length = 13, columnDefinition = "CHAR(13)")
-    String isbn;
+    // Relationships
 
-    // TODO change to FK reference
-    private Integer libraryLocationId;
+    @ManyToOne
+    @JoinColumn(name = "isbn", nullable = false)
+    private Book book;
+
+    @ManyToOne
+    @JoinColumn(name = "library_location_id", nullable = false)
+    private LibraryLocation location;
 }
