@@ -25,6 +25,8 @@ public class Genre {
     @Column(length = 30)
     private String name;
 
+    // Relationships
+
     @ManyToMany(mappedBy = "genres")
-    private Set<Book> books;
+    private Set<Book> booksWithinGenre;
 }

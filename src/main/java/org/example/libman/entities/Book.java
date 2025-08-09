@@ -57,10 +57,10 @@ public class Book {
     @ManyToMany(mappedBy = "writtenBooks")
     private Set<Author> authors;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(mappedBy = "booksWithinGenre")
     private Set<Genre> genres;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "catalogBook")
     private Set<BookCopy> libraryCopies;
 
     // TODO rewrite fromDTO method with new Book fields

@@ -28,5 +28,5 @@ public class LibraryLocation {
     // Relationships
 
     @OneToMany(mappedBy = "location")
-    private Set<BookCopy> locationCopies;
+    private Set<BookCopy> booksWithinLocation;
 }

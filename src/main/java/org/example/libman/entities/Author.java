@@ -28,6 +28,8 @@ public class Author {
     @Column(name = "last_name", length = 30)
     private String lastName;
 
+    // Relationships
+
     @ManyToMany(mappedBy = "authors")
     private Set<Book> writtenBooks;
 }
