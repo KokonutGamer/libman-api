@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 // Data returned by each method is written straight into the response body instead of rendering a template
 @RestController
 public class BookController {
@@ -48,7 +50,7 @@ public class BookController {
 
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @PostMapping("/books")
-    public ResponseEntity<?> newBook(@RequestBody BookDTO bookDTO) {
+    public ResponseEntity<?> newBook(@Valid @RequestBody BookDTO bookDTO) {
         EntityModel<Book> entityModel = assembler.toModel(repository.save(Book.fromDTO(bookDTO)));
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
