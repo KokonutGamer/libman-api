@@ -1,9 +1,13 @@
 package org.example.libman;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.example.libman.entities.Book;
+import org.example.libman.entities.Publisher;
 import org.example.libman.repositories.BookRepository;
+import org.example.libman.repositories.PublisherRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -27,10 +31,19 @@ public class LoadDatabase {
 
     // Spring Boot runs ALL CommandLineRunner beans once the application context is
     // loaded
-    @Bean
-    public CommandLineRunner initDatabase(BookRepository repository) {
+    // @Bean
+    public CommandLineRunner initDatabase(PublisherRepository publisherRepository, BookRepository bookRepository) {
         // Requests a copy of the repository
         String logText = "Preloading {}";
+
+        // Create publishers
+        Publisher squareEnix = new Publisher();
+        squareEnix.setName("Square Enix");
+        publisherRepository.save(squareEnix);
+
+        Publisher vizMedia = new Publisher();
+        vizMedia.setName("Viz Media");
+        publisherRepository.save(vizMedia);
 
         // Create books
         Book apothecary = new Book();
@@ -39,6 +52,7 @@ public class LoadDatabase {
         apothecary.setVolume("1");
         apothecary.setPageCount(178);
         apothecary.setPublicationDate(LocalDate.of(2020, 12, 8));
+        apothecary.setPublisher(publisherRepository.getReferenceById(1));
 
         Book frieren = new Book();
         frieren.setIsbn("9781974725762");
@@ -46,11 +60,12 @@ public class LoadDatabase {
         frieren.setVolume("1");
         frieren.setPageCount(192);
         frieren.setPublicationDate(LocalDate.of(2021, 11, 9));
+        frieren.setPublisher(publisherRepository.getReferenceById(2));
 
         return args -> {
             // Creates two Book entities to store into the repository
-            log.info(logText, repository.save(apothecary));
-            log.info(logText, repository.save(frieren));
+            log.info(logText, bookRepository.save(apothecary));
+            log.info(logText, bookRepository.save(frieren));
         };
     }
 
