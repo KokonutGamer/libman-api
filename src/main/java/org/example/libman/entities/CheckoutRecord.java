@@ -33,10 +33,10 @@ public class CheckoutRecord {
 
     // Relationships
     @ManyToOne
-    @JoinColumn(name = "library_card_barcode")
+    @JoinColumn(name = "library_card_barcode", nullable = false)
     private LibraryCard checkoutCard;
 
     @ManyToOne
-    @JoinColumn(name = "book_copy_barcode")
+    @JoinColumn(name = "book_copy_barcode", nullable = false)
     private BookCopy checkedOutBook;
 }

@@ -30,6 +30,6 @@ public class Author {
 
     // Relationships
 
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany
     private Set<Book> writtenBooks;
 }

@@ -54,10 +54,10 @@ public class Book {
     @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
-    @ManyToMany(mappedBy = "writtenBooks")
+    @ManyToMany
     private Set<Author> authors;
 
-    @ManyToMany(mappedBy = "booksWithinGenre")
+    @ManyToMany
     private Set<Genre> genres;
 
     @OneToMany(mappedBy = "catalogBook")

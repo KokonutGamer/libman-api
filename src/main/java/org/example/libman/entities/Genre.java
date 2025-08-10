@@ -27,6 +27,6 @@ public class Genre {
 
     // Relationships
 
-    @ManyToMany(mappedBy = "genres")
+    @ManyToMany
     private Set<Book> booksWithinGenre;
 }

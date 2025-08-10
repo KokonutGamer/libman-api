@@ -30,10 +30,10 @@ public class Phone {
     // Relationships
 
     @ManyToOne
-    @JoinColumn(name = "phone_type_id", columnDefinition = "CHAR(2)")
+    @JoinColumn(name = "phone_type_id", columnDefinition = "CHAR(2)", nullable = false)
     private PhoneType phoneType;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 }
