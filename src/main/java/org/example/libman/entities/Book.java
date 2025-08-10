@@ -5,8 +5,11 @@ import java.util.Set;
 
 import org.example.libman.dtos.BookDTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -60,7 +63,8 @@ public class Book {
     @ManyToMany
     private Set<Genre> genres;
 
-    @OneToMany(mappedBy = "catalogBook")
+    @JsonIgnore
+    @OneToMany(mappedBy = "catalogBook", fetch = FetchType.EAGER)
     private Set<BookCopy> libraryCopies;
 
     // TODO rewrite fromDTO method with new Book fields
