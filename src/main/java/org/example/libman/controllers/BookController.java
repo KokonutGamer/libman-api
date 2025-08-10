@@ -42,11 +42,22 @@ public class BookController {
         this.assembler = assembler;
     }
 
+    // Public endpoints
+
     @GetMapping("/books")
     public CollectionModel<EntityModel<Book>> all() {
-        List<EntityModel<Book>> books = repository.findAll().stream().map(assembler::toModel).collect(Collectors.toList());
+        List<EntityModel<Book>> books = repository.findAll().stream().map(assembler::toModel)
+                .collect(Collectors.toList());
         return CollectionModel.of(books, linkTo(methodOn(BookController.class).all()).withSelfRel());
     }
+
+    @GetMapping("/books/{isbn}")
+    public EntityModel<Book> one(@PathVariable String isbn) {
+        Book book = repository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
+        return assembler.toModel(book);
+    }
+
+    // Auth endpoints
 
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @PostMapping("/books")
@@ -54,13 +65,6 @@ public class BookController {
         EntityModel<Book> entityModel = assembler.toModel(repository.save(Book.fromDTO(bookDTO)));
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
-
-    // TODO don't change this method; use it to subscribe users that want to hold a book
-    @GetMapping("/books/{isbn}")
-    public EntityModel<Book> one(@PathVariable String isbn) {
-        Book book = repository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
-        return assembler.toModel(book);
-    } 
 
     // TODO enforce authorization using Spring Security - LIBRARIAN and ADMIN
     @PutMapping("/books/{isbn}")

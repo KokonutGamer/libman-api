@@ -1,4 +1,4 @@
-package org.example.libman;
+package org.example.libman.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
