@@ -10,20 +10,23 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 // Note that Spring Data also contains wrappers for MongoDB and Cassandra
 // JPA annotation to make this object ready for storage in a JPA-based data store
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = { "publisher", "authors", "genres", "libraryCopies" })
 @NoArgsConstructor
 @Table(name = "book")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -61,14 +64,16 @@ public class Book {
     @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(mappedBy = "writtenBooks")
     private Set<Author> authors;
 
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(mappedBy = "booksWithinGenre")
     private Set<Genre> genres;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "catalogBook", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "catalogBook")
     private Set<BookCopy> libraryCopies;
 
     // TODO rewrite fromDTO method with new Book fields
@@ -80,5 +85,20 @@ public class Book {
         book.setPageCount(dto.getPageCount());
         book.setPublicationDate(dto.getPublicationDate());
         return book;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if(obj instanceof Book b) {
+            return isbn != null && isbn.equals(b.getIsbn());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return isbn.hashCode();
     }
 }

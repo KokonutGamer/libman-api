@@ -12,11 +12,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = "publishedBooks")
 @NoArgsConstructor
 @Table(name = "publisher")
 public class Publisher {
@@ -33,4 +37,19 @@ public class Publisher {
     @JsonIgnore
     @OneToMany(mappedBy = "publisher", fetch = FetchType.EAGER)
     private Set<Book> publishedBooks;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj instanceof Publisher p) {
+            return id != null && id.equals(p.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
