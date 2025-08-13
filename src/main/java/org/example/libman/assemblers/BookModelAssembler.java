@@ -1,5 +1,6 @@
-package org.example.libman.controllers;
+package org.example.libman.assemblers;
 
+import org.example.libman.controllers.BookController;
 import org.example.libman.entities.Book;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class BookModelAssembler implements RepresentationModelAssembler<Book, EntityModel<Book>> {
     @Override
     public @NonNull EntityModel<Book> toModel(@NonNull Book book) {
-        return EntityModel.of(book, linkTo(methodOn(BookController.class).one(book.getIsbn())).withSelfRel(), linkTo(methodOn(BookController.class).all()).withRel("books"));
+        return EntityModel.of(book, linkTo(methodOn(BookController.class).one(book.getIsbn())).withSelfRel(),
+                linkTo(methodOn(BookController.class).all()).withRel("books"));
     }
 }

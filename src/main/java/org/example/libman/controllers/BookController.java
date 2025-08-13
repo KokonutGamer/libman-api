@@ -3,10 +3,12 @@ package org.example.libman.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.example.libman.assemblers.BookModelAssembler;
 import org.example.libman.dtos.BookDTO;
 import org.example.libman.entities.Book;
 import org.example.libman.exceptions.BookNotFoundException;
 import org.example.libman.repositories.BookRepository;
+import org.example.libman.services.BookService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -33,28 +35,30 @@ import jakarta.validation.Valid;
 @RestController
 public class BookController {
 
-    private final BookRepository repository;
-    private final BookModelAssembler assembler;
+    private final BookService bookService;
+    private final BookRepository bookRepository;
+    private final BookModelAssembler bookAssembler;
 
     // BookRepository injected by constructor into the controller
-    public BookController(BookRepository repository, BookModelAssembler assembler) {
-        this.repository = repository;
-        this.assembler = assembler;
+    public BookController(BookService bookService, BookRepository repository, BookModelAssembler assembler) {
+        this.bookService = bookService;
+        this.bookRepository = repository;
+        this.bookAssembler = assembler;
     }
 
-    // Public endpoints
+    // Public endpoints 
 
     @GetMapping("/books")
     public CollectionModel<EntityModel<Book>> all() {
-        List<EntityModel<Book>> books = repository.findAll().stream().map(assembler::toModel)
+        List<EntityModel<Book>> books = bookService.findAllBooks().stream().map(bookAssembler::toModel)
                 .collect(Collectors.toList());
         return CollectionModel.of(books, linkTo(methodOn(BookController.class).all()).withSelfRel());
     }
 
     @GetMapping("/books/{isbn}")
     public EntityModel<Book> one(@PathVariable String isbn) {
-        Book book = repository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
-        return assembler.toModel(book);
+        Book book = bookService.findByIsbn(isbn);
+        return bookAssembler.toModel(book);
     }
 
     // Auth endpoints
@@ -62,33 +66,36 @@ public class BookController {
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @PostMapping("/books")
     public ResponseEntity<?> newBook(@Valid @RequestBody BookDTO bookDTO) {
-        EntityModel<Book> entityModel = assembler.toModel(repository.save(Book.fromDTO(bookDTO)));
+        Book newBook = bookService.saveBook(bookDTO);
+
+        EntityModel<Book> entityModel = bookAssembler.toModel(newBook);
+
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
-    // TODO enforce authorization using Spring Security - LIBRARIAN and ADMIN
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @PutMapping("/books/{isbn}")
     public ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable String isbn) {
-        Book updatedBook = repository.findById(isbn).map(book -> {
+        Book updatedBook = bookRepository.findById(isbn).map(book -> {
             book.setTitle(newBook.getTitle());
             book.setVolume(newBook.getVolume());
             book.setEdition(newBook.getEdition());
             book.setPageCount(newBook.getPageCount());
             book.setPublicationDate(newBook.getPublicationDate());
-            return repository.save(book);
+            return bookRepository.save(book);
         }).orElseGet(() -> {
             // If no id found, save the newBook into the repository
-            return repository.save(newBook);
+            return bookRepository.save(newBook);
         });
 
-        EntityModel<Book> entityModel = assembler.toModel(updatedBook);
+        EntityModel<Book> entityModel = bookAssembler.toModel(updatedBook);
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
-    // TODO enforce authorization using Spring Security - USER and LIBRARIAN
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @PatchMapping("/books/{isbn}/checkout")
     public ResponseEntity<?> checkoutBook(@PathVariable String isbn) {
-        Book book = repository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
+        Book book = bookRepository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
 
         // TODO refactor checkout logic, or delegate to a service
 
@@ -99,10 +106,10 @@ public class BookController {
                         .withTitle("Method not allowed"));
     }
 
-    // TODO enforce authorization using Spring Security - LIBRARIAN only
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @PatchMapping("/books/{isbn}/return")
     public ResponseEntity<?> returnBook(@PathVariable String isbn) {
-        Book book = repository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
+        Book book = bookRepository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
 
         // TODO refactor return logic, or delegate to a service
 
@@ -113,10 +120,10 @@ public class BookController {
                         .withTitle("Method not allowed"));
     }
 
-    // TODO enforce authorization using Spring Security
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @DeleteMapping("/books/{isbn}")
     public ResponseEntity<?> deleteBook(@PathVariable String isbn) {
-        repository.deleteById(isbn);
+        bookRepository.deleteById(isbn);
         return ResponseEntity.noContent().build();
     }
 }
