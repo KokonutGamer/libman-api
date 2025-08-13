@@ -2,11 +2,13 @@ package org.example.libman.entities;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.example.libman.dtos.AuthorDTO;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,10 +27,11 @@ import lombok.ToString;
 @ToString(exclude = "writtenBooks")
 @NoArgsConstructor
 @Table(name = "author")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "first_name", length = 30)
@@ -39,10 +42,16 @@ public class Author {
 
     // Relationships
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "book_to_author", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_isbn", columnDefinition = "CHAR(13)"))
     private Set<Book> writtenBooks;
+
+    public static Author fromDTO(AuthorDTO dto) {
+        Author author = new Author();
+        author.setFirstName(dto.getFirstName());
+        author.setLastName(dto.getLastName());
+        return author;
+    }
 
     @Override
     public boolean equals(Object obj) {

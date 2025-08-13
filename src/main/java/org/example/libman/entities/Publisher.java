@@ -2,11 +2,11 @@ package org.example.libman.entities;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,10 +23,11 @@ import lombok.ToString;
 @ToString(exclude = "publishedBooks")
 @NoArgsConstructor
 @Table(name = "publisher")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Publisher {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(length = 30, unique = true)
@@ -34,8 +35,7 @@ public class Publisher {
 
     // Relationships
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "publisher", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "publisher")
     private Set<Book> publishedBooks;
 
     @Override

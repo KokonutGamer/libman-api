@@ -5,8 +5,9 @@ import java.util.Set;
 
 import org.example.libman.dtos.BookDTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +31,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Table(name = "book")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "isbn")
 public class Book {
 
     @Id
@@ -64,26 +66,36 @@ public class Book {
     @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "writtenBooks")
     private Set<Author> authors;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "booksWithinGenre")
     private Set<Genre> genres;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "catalogBook")
     private Set<BookCopy> libraryCopies;
 
-    // TODO rewrite fromDTO method with new Book fields
     public static Book fromDTO(BookDTO dto) {
         Book book = new Book();
+        book.setIsbn(dto.getIsbn());
         book.setTitle(dto.getTitle());
-        book.setVolume(dto.getVolume());
-        book.setEdition(dto.getEdition());
+
+        if (dto.getSubtitile() != null && !dto.getSubtitile().isBlank()) {
+            book.setSubtitle(dto.getSubtitile());
+        }
+
+        if (dto.getVolume() != null) {
+            book.setVolume(dto.getVolume());
+        }
+
+        if (dto.getEdition() != null) {
+            book.setEdition(dto.getEdition());
+        }
+
         book.setPageCount(dto.getPageCount());
         book.setPublicationDate(dto.getPublicationDate());
+        book.setDescription(dto.getDescription());
+        book.setDdn(dto.getDdn());
         return book;
     }
 
@@ -91,7 +103,7 @@ public class Book {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if(obj instanceof Book b) {
+        if (obj instanceof Book b) {
             return isbn != null && isbn.equals(b.getIsbn());
         }
         return false;

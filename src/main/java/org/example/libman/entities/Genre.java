@@ -2,11 +2,11 @@ package org.example.libman.entities;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,19 +25,19 @@ import lombok.ToString;
 @ToString(exclude = "booksWithinGenre")
 @NoArgsConstructor
 @Table(name = "genre")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Genre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    
     @Column(length = 30)
     private String name;
-
+    
     // Relationships
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    
+    @ManyToMany
     @JoinTable(name = "books_to_genre", joinColumns = @JoinColumn(name = "genre_id"), inverseJoinColumns = @JoinColumn(name = "book_isbn", columnDefinition = "CHAR(13)"))
     private Set<Book> booksWithinGenre;
 
