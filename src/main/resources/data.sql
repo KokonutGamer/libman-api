@@ -1,27 +1,27 @@
 INSERT INTO
-    Publisher(id, name)
+    Publisher(name)
 VALUES
-    (1, 'Square Enix Manga & Books');
+    ('Square Enix Manga & Books');
 
 INSERT INTO
-    Publisher(id, name)
+    Publisher(name)
 VALUES
-    (2, 'Viz Media');
+    ('Viz Media');
 
 INSERT INTO
-    Author(id, first_name, last_name)
+    Author(first_name, last_name)
 VALUES
-    (1, 'Natsu', 'Hyuuga');
+    ('Natsu', 'Hyuuga');
 
 INSERT INTO
-    Author(id, first_name, last_name)
+    Author(first_name, last_name)
 VALUES
-    (2, 'Nekokurage', NULL);
+    ('Nekokurage', NULL);
 
 INSERT INTO
-    Author(id, first_name, last_name)
+    Author(first_name, last_name)
 VALUES
-    (3, 'Tsukasa', 'Abe');
+    ('Tsukasa', 'Abe');
 
 INSERT INTO
     Book(
