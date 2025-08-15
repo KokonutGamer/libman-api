@@ -5,8 +5,12 @@ import java.util.stream.Collectors;
 
 import org.example.libman.controllers.AuthorController;
 import org.example.libman.controllers.BookController;
+import org.example.libman.controllers.GenreController;
+import org.example.libman.controllers.PublisherController;
 import org.example.libman.dtos.AuthorModel;
 import org.example.libman.dtos.BookModel;
+import org.example.libman.dtos.GenreModel;
+import org.example.libman.dtos.PublisherModel;
 import org.example.libman.entities.Book;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
@@ -23,6 +27,10 @@ public class BookModelAssembler implements RepresentationModelAssembler<Book, Re
     public @NonNull RepresentationModel<?> toModel(@NonNull Book book) {
         BookModel model = BookModel.fromEntity(book);
 
+        // Publisher
+        PublisherModel publisherModel = PublisherModel.fromEntity(book.getPublisher());
+        publisherModel.add(linkTo(methodOn(PublisherController.class).one(book.getPublisher().getId())).withSelfRel());
+
         // Authors
         List<AuthorModel> authorsEmbedded = book.getAuthors().stream().map(a -> {
             AuthorModel authorModel = AuthorModel.fromEntity(a);
@@ -30,8 +38,17 @@ public class BookModelAssembler implements RepresentationModelAssembler<Book, Re
             return authorModel;
         }).collect(Collectors.toList());
 
+        // Genres
+        List<GenreModel> genresEmbedded = book.getGenres().stream().map(g -> {
+            GenreModel genreModel = GenreModel.fromEntity(g);
+            genreModel.add(linkTo(methodOn(GenreController.class).one(g.getId())).withSelfRel());
+            return genreModel;
+        }).collect(Collectors.toList());
+
         RepresentationModel<?> halModel = HalModelBuilder.halModelOf(model)
+                .embed(publisherModel)
                 .embed(authorsEmbedded)
+                .embed(genresEmbedded)
                 .link(linkTo(methodOn(BookController.class).one(book.getIsbn())).withSelfRel())
                 .link(linkTo(methodOn(BookController.class).all()).withRel("books"))
                 .build();

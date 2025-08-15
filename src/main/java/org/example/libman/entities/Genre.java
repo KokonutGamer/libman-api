@@ -38,7 +38,7 @@ public class Genre {
     // Relationships
     
     @ManyToMany
-    @JoinTable(name = "books_to_genre", joinColumns = @JoinColumn(name = "genre_id"), inverseJoinColumns = @JoinColumn(name = "book_isbn", columnDefinition = "CHAR(13)"))
+    @JoinTable(name = "book_to_genre", joinColumns = @JoinColumn(name = "genre_id"), inverseJoinColumns = @JoinColumn(name = "book_isbn", columnDefinition = "CHAR(13)"))
     private Set<Book> booksWithinGenre;
 
     @Override
