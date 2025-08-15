@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.example.libman.assemblers.BookModelAssembler;
 import org.example.libman.dtos.BookDTO;
+import org.example.libman.dtos.BookModel;
 import org.example.libman.entities.Book;
 import org.example.libman.exceptions.BookNotFoundException;
 import org.example.libman.repositories.BookRepository;
@@ -13,6 +14,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.problem.Problem;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -49,14 +51,14 @@ public class BookController {
     // Public endpoints 
 
     @GetMapping("/books")
-    public CollectionModel<EntityModel<Book>> all() {
-        List<EntityModel<Book>> books = bookService.findAllBooks().stream().map(bookAssembler::toModel)
+    public CollectionModel<RepresentationModel<?>> all() {
+        List<RepresentationModel<?>> books = bookService.findAllBooks().stream().map(bookAssembler::toModel)
                 .collect(Collectors.toList());
         return CollectionModel.of(books, linkTo(methodOn(BookController.class).all()).withSelfRel());
     }
 
     @GetMapping("/books/{isbn}")
-    public EntityModel<Book> one(@PathVariable String isbn) {
+    public RepresentationModel<?> one(@PathVariable String isbn) {
         Book book = bookService.findByIsbn(isbn);
         return bookAssembler.toModel(book);
     }
@@ -68,7 +70,7 @@ public class BookController {
     public ResponseEntity<?> newBook(@Valid @RequestBody BookDTO bookDTO) {
         Book newBook = bookService.saveBook(bookDTO);
 
-        EntityModel<Book> entityModel = bookAssembler.toModel(newBook);
+        RepresentationModel<?> entityModel = bookAssembler.toModel(newBook);
 
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
@@ -88,7 +90,7 @@ public class BookController {
             return bookRepository.save(newBook);
         });
 
-        EntityModel<Book> entityModel = bookAssembler.toModel(updatedBook);
+        RepresentationModel<?> entityModel = bookAssembler.toModel(updatedBook);
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
