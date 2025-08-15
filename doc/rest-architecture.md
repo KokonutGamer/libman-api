@@ -26,4 +26,11 @@ REST is a common software paradigm used in various different APIs existing in th
 - Code on demand (optional):
   - The system should be free to return executable code to support a part of the application.
 
+### REST Resources
+- [RESTful API Tutorial](https://restfulapi.net/) by [Lokesh Gupta](https://x.com/HowToDoInJava)
+- [HATEOAS REST Services With Spring](https://dzone.com/articles/hypermedia-driven-rest-services-with-spring-hateoa) by [Brian Hannaway](https://dzone.com/users/2798331/bhannawa.html)
+- [HAL - Hypertext Application Language](https://stateless.co/hal_specification.html) by [Mike Kelly](https://stateless.co/)
+- [StackOverflow - Why you should use DTOs in your REST API](https://stackoverflow.com/a/36175349/21415037) by [cassiomolin](https://stackoverflow.com/users/1426227/cassiomolin)
+- [Spring Boot HATEOAS](https://howtodoinjava.com/spring/spring-hateoas-tutorial) by [Lokesh Gupta](https://x.com/HowToDoInJava)
+
 [^1]: See [REST Architectural Constraints](https://restfulapi.net/rest-architectural-constraints/) for more information.
