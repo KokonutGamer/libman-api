@@ -8,7 +8,7 @@ import org.example.libman.entities.Genre;
 import org.example.libman.exceptions.GenreNotFoundException;
 import org.example.libman.repositories.GenreRepository;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.RepresentationModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +27,14 @@ public class GenreController {
     }
 
     @GetMapping("/genres")
-    public CollectionModel<EntityModel<Genre>> all() {
-        List<EntityModel<Genre>> genres = genreRepository.findAll().stream().map(genreAssembler::toModel)
+    public CollectionModel<RepresentationModel<?>> all() {
+        List<RepresentationModel<?>> genres = genreRepository.findAll().stream().map(genreAssembler::toModel)
                 .collect(Collectors.toList());
         return CollectionModel.of(genres, linkTo(methodOn(GenreController.class).all()).withSelfRel());
     }
 
     @GetMapping("/genres/{id}")
-    public EntityModel<Genre> one(@PathVariable Integer id) {
+    public RepresentationModel<?> one(@PathVariable Integer id) {
         Genre genre = genreRepository.findById(id).orElseThrow(() -> new GenreNotFoundException(id));
         return genreAssembler.toModel(genre);
     }
