@@ -5,13 +5,10 @@ import java.util.stream.Collectors;
 
 import org.example.libman.assemblers.BookModelAssembler;
 import org.example.libman.dtos.BookDTO;
-import org.example.libman.dtos.BookModel;
 import org.example.libman.entities.Book;
-import org.example.libman.exceptions.BookNotFoundException;
 import org.example.libman.repositories.BookRepository;
 import org.example.libman.services.BookService;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
@@ -48,7 +45,7 @@ public class BookController {
         this.bookAssembler = assembler;
     }
 
-    // Public endpoints 
+    // Public endpoints
 
     @GetMapping("/books")
     public CollectionModel<RepresentationModel<?>> all() {
@@ -97,8 +94,6 @@ public class BookController {
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @PatchMapping("/books/{isbn}/checkout")
     public ResponseEntity<?> checkoutBook(@PathVariable String isbn) {
-        Book book = bookRepository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
-
         // TODO refactor checkout logic, or delegate to a service
 
         return ResponseEntity
@@ -111,8 +106,6 @@ public class BookController {
     @PreAuthorize("hasRole('LIBRARIAN')")
     @PatchMapping("/books/{isbn}/return")
     public ResponseEntity<?> returnBook(@PathVariable String isbn) {
-        Book book = bookRepository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
-
         // TODO refactor return logic, or delegate to a service
 
         return ResponseEntity

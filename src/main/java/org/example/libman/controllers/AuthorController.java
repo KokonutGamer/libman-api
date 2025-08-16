@@ -8,7 +8,7 @@ import org.example.libman.entities.Author;
 import org.example.libman.exceptions.AuthorNotFoundException;
 import org.example.libman.repositories.AuthorRepository;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.RepresentationModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +27,14 @@ public class AuthorController {
     }
 
     @GetMapping("/authors")
-    public CollectionModel<EntityModel<Author>> all() {
-        List<EntityModel<Author>> authors = authorRepository.findAll().stream().map(authorAssembler::toModel)
+    public CollectionModel<RepresentationModel<?>> all() {
+        List<RepresentationModel<?>> authors = authorRepository.findAll().stream().map(authorAssembler::toModel)
                 .collect(Collectors.toList());
         return CollectionModel.of(authors, linkTo(methodOn(AuthorController.class).all()).withSelfRel());
     }
 
     @GetMapping("/authors/{id}")
-    public EntityModel<Author> one(@PathVariable Integer id) {
+    public RepresentationModel<?> one(@PathVariable Integer id) {
         Author author = authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
         return authorAssembler.toModel(author);
     }
