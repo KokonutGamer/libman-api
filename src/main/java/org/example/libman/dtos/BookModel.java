@@ -46,4 +46,13 @@ public class BookModel extends RepresentationModel<BookModel> {
         model.setDdn(book.getDdn());
         return model;
     }
+
+    public static BookModel simplified(Book book) {
+        BookModel model = new BookModel();
+        model.setIsbn(book.getIsbn());
+        model.setTitle(book.getTitle());
+        model.setSubtitle(book.getSubtitle());
+        model.setDdn(book.getDdn());
+        return model;
+    }
 }

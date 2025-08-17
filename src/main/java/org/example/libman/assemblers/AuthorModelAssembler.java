@@ -23,7 +23,7 @@ public class AuthorModelAssembler implements RepresentationModelAssembler<Author
         AuthorModel model = AuthorModel.fromEntity(author);
 
         List<BookModel> booksEmbedded = author.getWrittenBooks().stream().map(b -> {
-            BookModel bookModel = BookModel.fromEntity(b);
+            BookModel bookModel = BookModel.simplified(b);
             bookModel.add(linkTo(methodOn(BookController.class).one(b.getIsbn())).withSelfRel());
             return bookModel;
         }).collect(Collectors.toList());

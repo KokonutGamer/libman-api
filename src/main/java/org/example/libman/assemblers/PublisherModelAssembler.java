@@ -23,7 +23,7 @@ public class PublisherModelAssembler implements RepresentationModelAssembler<Pub
         PublisherModel model = PublisherModel.fromEntity(publisher);
 
         List<BookModel> booksEmbedded = publisher.getPublishedBooks().stream().map(b -> {
-            BookModel bookModel = BookModel.fromEntity(b);
+            BookModel bookModel = BookModel.simplified(b);
             bookModel.add(linkTo(methodOn(BookController.class).one(b.getIsbn())).withSelfRel());
             return bookModel;
         }).collect(Collectors.toList());

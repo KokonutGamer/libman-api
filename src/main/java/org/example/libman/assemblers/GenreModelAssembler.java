@@ -23,7 +23,7 @@ public class GenreModelAssembler implements RepresentationModelAssembler<Genre, 
         GenreModel model = GenreModel.fromEntity(genre);
 
         List<BookModel> booksEmbedded = genre.getBooksWithinGenre().stream().map(b -> {
-            BookModel bookModel = BookModel.fromEntity(b);
+            BookModel bookModel = BookModel.simplified(b);
             bookModel.add(linkTo(methodOn(BookController.class).one(b.getIsbn())).withSelfRel());
             return bookModel;
         }).collect(Collectors.toList());
