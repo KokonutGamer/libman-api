@@ -2,9 +2,6 @@ package org.example.libman.entities;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,7 +20,6 @@ import lombok.ToString;
 @ToString(exclude = "publishedBooks")
 @NoArgsConstructor
 @Table(name = "publisher")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Publisher {
 
     @Id

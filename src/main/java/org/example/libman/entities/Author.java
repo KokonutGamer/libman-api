@@ -4,9 +4,6 @@ import java.util.Set;
 
 import org.example.libman.dtos.AuthorDTO;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +24,6 @@ import lombok.ToString;
 @ToString(exclude = "writtenBooks")
 @NoArgsConstructor
 @Table(name = "author")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Author {
 
     @Id

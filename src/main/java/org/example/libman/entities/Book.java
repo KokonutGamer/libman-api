@@ -5,10 +5,6 @@ import java.util.Set;
 
 import org.example.libman.dtos.BookDTO;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -30,8 +26,6 @@ import lombok.ToString;
 @ToString(exclude = { "publisher", "authors", "genres", "libraryCopies" })
 @NoArgsConstructor
 @Table(name = "book")
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "isbn")
 public class Book {
 
     @Id
