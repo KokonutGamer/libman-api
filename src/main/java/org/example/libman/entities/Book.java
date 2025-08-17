@@ -80,8 +80,8 @@ public class Book {
         book.setIsbn(dto.getIsbn());
         book.setTitle(dto.getTitle());
 
-        if (dto.getSubtitile() != null && !dto.getSubtitile().isBlank()) {
-            book.setSubtitle(dto.getSubtitile());
+        if (dto.getSubtitle() != null && !dto.getSubtitle().isBlank()) {
+            book.setSubtitle(dto.getSubtitle());
         }
 
         if (dto.getVolume() != null) {

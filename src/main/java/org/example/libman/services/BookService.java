@@ -63,11 +63,36 @@ public class BookService {
         return book;
     }
 
+    public boolean checkBookExistsByIsbn(String isbn) {
+        return bookRepository.existsById(isbn);
+    }
+
+    public void deleteBookByIsbn(String isbn) {
+        bookRepository.deleteById(isbn);
+    }
+
     public Book findByIsbn(String isbn) {
         return bookRepository.findById(isbn).orElseThrow(() -> new BookNotFoundException(isbn));
     }
 
     public List<Book> findAllBooks() {
         return bookRepository.findAll();
+    }
+
+    public Book updateBook(BookDTO dto) {
+        return bookRepository.findById(dto.getIsbn()).map(book -> {
+            book.setIsbn(dto.getIsbn());
+            book.setTitle(dto.getTitle());
+            book.setSubtitle(dto.getSubtitle());
+            book.setVolume(dto.getVolume());
+            book.setEdition(dto.getEdition());
+            book.setPageCount(dto.getPageCount());
+            book.setPublicationDate(dto.getPublicationDate());
+            book.setDescription(dto.getDescription());
+            book.setDdn(dto.getDdn());
+            return book;
+        }).orElseGet(() -> {
+            return saveBook(dto);
+        });
     }
 }

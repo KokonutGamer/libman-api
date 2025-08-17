@@ -23,7 +23,7 @@ public class BookDTO {
     @NotBlank(message = "Title is required")
     private String title;
 
-    private String subtitile;
+    private String subtitle;
 
     @Digits(integer = 4, fraction = 0, message = "Volume must only contain digits")
     @DecimalMin(value = "1", message = "Volume must be a positive number")
