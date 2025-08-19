@@ -32,5 +32,6 @@ REST is a common software paradigm used in various different APIs existing in th
 - [HAL - Hypertext Application Language](https://stateless.co/hal_specification.html) by [Mike Kelly](https://stateless.co/)
 - [StackOverflow - Why you should use DTOs in your REST API](https://stackoverflow.com/a/36175349/21415037) by [cassiomolin](https://stackoverflow.com/users/1426227/cassiomolin)
 - [Spring Boot HATEOAS](https://howtodoinjava.com/spring/spring-hateoas-tutorial) by [Lokesh Gupta](https://x.com/HowToDoInJava)
+- [Answer to "REST/HATEOAS - Available methods in HAL links"](https://stackoverflow.com/a/44950392/21415037) on StackOverflow by [VoiceOfUnreason](https://stackoverflow.com/users/54734/voiceofunreason)
 
 [^1]: See [REST Architectural Constraints](https://restfulapi.net/rest-architectural-constraints/) for more information.
