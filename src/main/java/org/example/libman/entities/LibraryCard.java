@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class LibraryCard {
 
     @Id
-    @Column(length = 13, columnDefinition = "CHAR(13)")
+    @Column(length = 14, columnDefinition = "CHAR(14)")
     private String barcode;
 
     @Column(name = "issue_date")

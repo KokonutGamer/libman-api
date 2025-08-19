@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class BookCopy {
 
     @Id
-    @Column(length = 10, columnDefinition = "CHAR(10)")
+    @Column(length = 14, columnDefinition = "CHAR(14)")
     private String barcode;
 
     // Relationships
