@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.example.libman.assemblers.BookModelAssembler;
 import org.example.libman.dtos.BookDTO;
+import org.example.libman.dtos.ConflictMessage;
 import org.example.libman.entities.Book;
 import org.example.libman.services.BookService;
 import org.springframework.hateoas.CollectionModel;
@@ -12,6 +13,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.RepresentationModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,6 +59,11 @@ public class BookController {
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @PostMapping("/books")
     public ResponseEntity<?> newBook(@Valid @RequestBody BookDTO bookDTO) {
+        if (bookService.checkBookExistsByIsbn(bookDTO.getIsbn())) {
+            ConflictMessage errorBody = new ConflictMessage("BookConflict", "newBook",
+                    "Book with the given ISBN already exists.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
+        }
         Book newBook = bookService.saveBook(bookDTO);
         RepresentationModel<?> entityModel = bookAssembler.toModel(newBook);
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
