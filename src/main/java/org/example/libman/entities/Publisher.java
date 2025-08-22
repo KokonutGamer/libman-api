@@ -26,7 +26,7 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 30, unique = true)
+    @Column(length = 50, unique = true)
     private String name;
 
     // Relationships
