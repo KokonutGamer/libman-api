@@ -664,19 +664,19 @@ INSERT INTO Book_To_Genre(genre_id, book_isbn)
 
 -- J.R.R. Tolkien's Book
 INSERT INTO Publisher(name)
-    VALUES ('George Allen & Unwin');
+    VALUES ('Houghton Mifflin Harcourt');
 
 INSERT INTO Author(first_name, last_name)
     VALUES ('J.R.R.', 'Tolkien');
 
 INSERT INTO Book(isbn, title, page_count, publication_date, ddn, publisher_id)
-    VALUES ('9780547928227', 'The Hobbit', 310, '1937-09-21', '823.91',(
+    VALUES ('9780547928227', 'The Hobbit', 306, '2012-09-18', '823.91',(
             SELECT
                 id
             FROM
                 Publisher
             WHERE
-                name = 'George Allen & Unwin'));
+                name = 'Houghton Mifflin Harcourt'));
 
 INSERT INTO Book_To_Author(author_id, book_isbn)
     VALUES ((

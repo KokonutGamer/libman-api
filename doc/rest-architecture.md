@@ -14,7 +14,7 @@ REST is a common software paradigm used in various different APIs existing in th
   - Client applications and server applications should be able to evolve separately without any dependency on each other.
   - A client should know only resource URIs.
 - Stateless:
-  - All client-sersver interactions should be stateless.
+  - All client-server interactions should be stateless.
   - The server should not store anything about the latest HTTP request the client made.
 - Cacheable:
   - Resources should be cached when applicable.
